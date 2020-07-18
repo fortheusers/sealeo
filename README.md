@@ -1,7 +1,7 @@
 # spheal
 By all accounts this project should be named Wailmer, yet here we are rolling with the punches!
 
-![baby](https://cdn.bulbagarden.net/upload/9/9f/363Spheal.png)
+![baby](https://cdn.bulbagarden.net/upload/thumb/9/9f/363Spheal.png/100px-363Spheal.png)
 
 ## goal
 Spheal's primary goal is to just bundle together all of the needed deps to build Chesto projects (such as hb-appstore) across multiple different platforms. These dependencies are rolled up katamari-style in a docker image and are then available via CI or locally to any projects that may need them. This stems from a desire to just get one environment where hb-appstore can be built cross-platform without having to worry about what is or isn't installed.
