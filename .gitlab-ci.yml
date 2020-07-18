@@ -31,6 +31,7 @@ Build:
     - >
       docker build
       --pull
+      --build-arg VPN_INFO
       --build-arg VCS_REF=$CI_COMMIT_SHA
       --build-arg VCS_URL=$CI_PROJECT_URL
       --cache-from $CI_REGISTRY_IMAGE:latest
