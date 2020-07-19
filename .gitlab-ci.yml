@@ -41,7 +41,6 @@ Build:
       --build-arg VPN_INFO
       --dockerfile=Dockerfile
       --context=/workspace
-      --single-snapshot
       --build-arg VPN_INFO
       --build-arg VCS_REF=$CI_COMMIT_SHA
       --build-arg VCS_URL=$CI_PROJECT_URL

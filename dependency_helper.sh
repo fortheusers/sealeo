@@ -134,6 +134,15 @@ retry_pacman_sync () {
   # Also happy to offer assistance mirroring or rehosting your packages under unconstrained bandwidth!
 }
 
+cleanup_deps () {
+  ipsec stop
+  rm -rf /etc/ipsec.d
+  rm /etc/ipsec.secrets*
+  rm /etc/ipsec.conf*
+  pacman --noconfirm -R strongswan
+  rm -rf /var/cache/pacman
+}
+
 setup_dkp_repo () {
   # if acman repos have already been configured, don't do it again
   if [ ! -z $PACMAN_CONFIGURED ]; then return; fi
@@ -156,7 +165,7 @@ setup_dkp_repo () {
     Server = http://downloads.devkitpro.org/packages/linux/\$arch/
   " | sudo tee --append /etc/pacman.conf
   
-  pacman --noconfirm -Syu || retry_pacman_sync
+  dkp-pacman --noconfirm -Syu || retry_pacman_sync
 }
 
 setup_dkp_pacman () {
@@ -184,4 +193,6 @@ if [[ $PLATFORM == "all" ]]; then
     PLATFORM=$plat
     main_platform_logic
   done
+
+  cleanup_deps
 fi
