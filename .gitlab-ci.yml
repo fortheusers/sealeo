@@ -30,6 +30,7 @@ Build:
     # the GitLab registry
 
     # use kaniko so that we can use NET_ADMIN cap while building
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > config.json
     - >
       docker run
       --cap-add=NET_ADMIN
