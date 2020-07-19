@@ -28,16 +28,23 @@ Build:
     # notice the cache-from, which is going to use the image we just pulled locally
     # the built image is tagged locally with the commit SHA, and then pushed to 
     # the GitLab registry
+
+    # use kaniko so that we can use NET_ADMIN cap while building
     - >
-      docker build
-      --pull
+      docker run
+      --cap-add=NET_ADMIN
+      -e VPN_INFO="$VPN_INFO"
+      --rm -v $(pwd):/workspace
+      gcr.io/kaniko-project/executor:v0.24.0
+      --build-arg VPN_INFO
+      --dockerfile=Dockerfile
+      --context=/workspace
+      --single-snapshot
       --build-arg VPN_INFO
       --build-arg VCS_REF=$CI_COMMIT_SHA
       --build-arg VCS_URL=$CI_PROJECT_URL
-      --cache-from $CI_REGISTRY_IMAGE:latest
-      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-      .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      --cache-repo $CI_REGISTRY_IMAGE:latest
+      --destination=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
 # Here, the goal is to tag the "master" branch as "latest"
 Push latest:
