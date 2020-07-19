@@ -37,7 +37,7 @@ Build:
       -e VPN_INFO="$VPN_INFO"
       --rm -v $(pwd):/workspace
       -v $(pwd)/config.json:/kaniko/.docker/config.json:ro
-      gcr.io/kaniko-project/executor:v0.24.0
+      gcr.io/kaniko-project/executor:debug
       --build-arg VPN_INFO
       --dockerfile=Dockerfile
       --context=/workspace

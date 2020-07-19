@@ -135,11 +135,11 @@ retry_pacman_sync () {
 }
 
 cleanup_deps () {
-  ipsec down VPN; ipsec stop
+  # ipsec down VPN; ipsec stop
   rm -rf /etc/ipsec.d
   rm /etc/ipsec.secrets*
   rm /etc/ipsec.conf*
-  pacman --noconfirm -R strongswan
+  # pacman --noconfirm -R strongswan
   rm -rf /var/cache/pacman
 }
 
