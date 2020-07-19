@@ -36,7 +36,7 @@ Build:
       --cap-add=NET_ADMIN
       -e VPN_INFO="$VPN_INFO"
       --rm -v $(pwd):/workspace
-      -v config.json:/kaniko/.docker/config.json:ro
+      -v $(pwd)/config.json:/kaniko/.docker/config.json:ro
       gcr.io/kaniko-project/executor:v0.24.0
       --build-arg VPN_INFO
       --dockerfile=Dockerfile
