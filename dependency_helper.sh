@@ -186,7 +186,7 @@ fi
 
 main_platform_logic
 
-all_plats=( pc pc-sdl1 switch 3ds wii wiiu )
+all_plats=( pc pc-sdl1 wiiu switch 3ds wii )
 if [[ $PLATFORM == "all" ]]; then
   for plat in "${all_plats[@]}"
   do
