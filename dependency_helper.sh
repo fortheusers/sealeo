@@ -116,7 +116,6 @@ retry_pacman_sync () {
   openssl x509 -inform der -in /etc/ipsec.d/cacerts/VPN.der -out /etc/ipsec.d/cacerts/VPN.pem
 
   ipsec restart; sleep 5; ipsec up VPN >/dev/null 2>&1
-  pacman --noconfirm -Syu
 
   # To any dkP staff that may be reading this: Why don't you want developers to use their own scripts for their own CI?
   # if it's a bandwidth issue, let's talk, because hosting static resources (like pacman repos) should not be incurring bandwidth charges
@@ -132,6 +131,8 @@ retry_pacman_sync () {
   # It's not dkP staff's concern if they don't like the way that we're building our own packages, happy to talk more about this
 
   # Also happy to offer assistance mirroring or rehosting your packages under unconstrained bandwidth!
+
+  pacman --noconfirm -Syu
 }
 
 cleanup_deps () {
@@ -177,7 +178,7 @@ setup_dkp_pacman () {
   DKP="dkp-"
   PACMAN_ROOT="/opt/devkitpro/pacman/"
 
-  dkp-pacman --noconfirm -Syu || retry_pacman_sync
+  dkp-pacman --noconfirm -Syu || retry_pacman_sync || exit 2
 }
 
 if [ -z $HAS_SUDO ]; then
