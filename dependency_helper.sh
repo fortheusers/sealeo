@@ -144,7 +144,7 @@ cleanup_deps () {
 }
 
 setup_dkp_repo () {
-  # if acman repos have already been configured, don't do it again
+  # if pacman repos have already been configured, don't do it again
   if [ ! -z $PACMAN_CONFIGURED ]; then return; fi
   PACMAN_CONFIGURED="true"
 
@@ -165,7 +165,7 @@ setup_dkp_repo () {
     Server = http://downloads.devkitpro.org/packages/linux/\$arch/
   " | sudo tee --append /etc/pacman.conf
   
-  dkp-pacman --noconfirm -Syu || retry_pacman_sync
+  dkp-pacman --noconfirm -Syu || retry_pacman_sync || exit 2 # exit if our sync retry fails, else we keep going and build a dud image
 }
 
 setup_dkp_pacman () {
