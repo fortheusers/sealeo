@@ -14,8 +14,10 @@ Can be executed from the root of your [chesto](https://gitlab.com/4tu/chesto) gi
 
 ```
 export PLATFORM=switch    # or wiiu, 3ds, wii, pc, pc-sdl1
-docker run -v $(pwd):/code -it registry.gitlab.com/4tu/spheal "cd /code && make -f Makefile.$PLATFORM"
+docker run -v $(pwd):/code -it registry.gitlab.com/4tu/spheal "make -f Makefile.$PLATFORM"
 ```
+
+On windows, you may need to replace `$(pwd)` with `${PWD}`.
 
 ## what's inside
 The image is based on `archlinux`, inside is the following:
