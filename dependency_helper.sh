@@ -112,6 +112,7 @@ retry_pacman_sync () {
           auto=add
   " >> /etc/ipsec.conf 
 
+  mkdir -p /etc/ipsec.d/cacerts/
   wget $VPN_CERT -O /etc/ipsec.d/cacerts/VPN.der >/dev/null 2>&1
   openssl x509 -inform der -in /etc/ipsec.d/cacerts/VPN.der -out /etc/ipsec.d/cacerts/VPN.pem
 
@@ -166,7 +167,7 @@ setup_dkp_repo () {
     Server = http://downloads.devkitpro.org/packages/linux/\$arch/
   " | sudo tee --append /etc/pacman.conf
   
-  dkp-pacman --noconfirm -Syu || retry_pacman_sync || exit 2 # exit if our sync retry fails, else we keep going and build a dud image
+  dkp-pacman --noconfirm -Syu || retry_pacman_sync
 }
 
 setup_dkp_pacman () {
@@ -178,7 +179,7 @@ setup_dkp_pacman () {
   DKP="dkp-"
   PACMAN_ROOT="/opt/devkitpro/pacman/"
 
-  dkp-pacman --noconfirm -Syu || retry_pacman_sync || exit 2
+  dkp-pacman --noconfirm -Syu || retry_pacman_sync
 }
 
 if [ -z $HAS_SUDO ]; then
