@@ -1,7 +1,7 @@
 # sealeo
 A docker image to facilitate building homebrew apps across multi-platforms. Based on [Spheal](https://gitlab.com/4tu/spheal), but has support for both amd64 and arm64 architectures.
 
-![baby](https://archives.bulbagarden.net/media/upload/f/f6/364Sealeo.png)
+<img src="https://user-images.githubusercontent.com/2467473/186280808-80ce15d7-f6d7-454a-82cb-21226a598a31.png" alt="baby" width="200" />
 
 Sealeo's primary goal is to just bundle together all of the needed deps to build [Chesto](https://github.com/fortheusers/chesto) projects (such as [hb-appstore](http://github.com/fortheusers/hb-appstore)) across multiple different platforms. These dependencies are rolled up katamari-style in a docker image and are then available via CI or locally to any projects that may need them. This stems from a desire to just get one environment where hb-appstore can be built cross-platform without having to worry about what is or isn't installed.
 
