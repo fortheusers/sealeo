@@ -1,13 +1,14 @@
-name: Build
+name: Build container
 
 # Controls when the workflow will run
 on:
-  workflow_dispatch
   push:
     branches:
       - 'main'
+      - 'ci-woes'
     tags:
       - 'v*.*.*'
+      - 'latest'
   pull_request:
     branches:
       - 'main'
@@ -57,7 +58,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          allow: network.host
           platforms: linux/amd64,linux/arm64/v8
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.spheal_meta.outputs.tags }}
+          tags: ${{ steps.spheal_meta.outputs.tags }},ghcr.io/fortheusers/sealeo:latest
           labels: ${{ steps.spheal_meta.outputs.labels }}

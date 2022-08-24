@@ -41,7 +41,7 @@ main_platform_logic () {
 }
 
 install_container_deps () {
-  apt-get update && apt-get -y install wget sudo libxml2 xz-utils lzma build-essential haveged
+  apt-get update && apt-get -y install wget sudo libxml2 xz-utils lzma build-essential haveged curl
   haveged &
   touch /trustdb.gpg
 }
@@ -62,7 +62,7 @@ retry_pacman_sync () {
   # we get a connection error, retry using a different IP.
   # Since we're building a reusable container for the future, this isn't
   # going to overload their servers.
-  apt-get -y install strongswan jq curl
+  apt-get -y install strongswan jq libcharon-extra-plugins
 
   # load VPN info from environment secret
   declare -a INFO=($VPN_INFO)
@@ -92,6 +92,8 @@ retry_pacman_sync () {
   openssl x509 -inform der -in /etc/ipsec.d/cacerts/VPN.der -out /etc/ipsec.d/cacerts/VPN.pem
 
   ipsec restart; sleep 5; ipsec up VPN >/dev/null 2>&1
+
+  dkp-pacman --noconfirm -Syu
 }
 
 cleanup_deps () {
@@ -130,6 +132,6 @@ if [[ $PLATFORM == "all" ]]; then
     PLATFORM=$plat
     main_platform_logic
   done
-
-  cleanup_deps
 fi
+
+cleanup_deps

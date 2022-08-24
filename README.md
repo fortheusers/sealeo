@@ -15,7 +15,14 @@ export PLATFORM=switch    # or wiiu, 3ds, wii, pc, pc-sdl1
 docker run -v $(pwd):/code -it ghcr.io/fortheusers/sealeo "make $PLATFORM"
 ```
 
-On windows, you may need to replace `$(pwd)` with `${PWD}`.
+On Windows, you may need to replace `$(pwd)` with `${PWD}`, or `%CD%`.
+
+To enter a shell in the container without running make, you can run bash:
+```
+docker run -v $(pwd):/code -it ghcr.io/fortheusers/sealeo /bin/bash
+```
+
+This can be useful for non-Chesto projects or to debug code interactively.
 
 ## what's inside
 The image is based on `ubuntu`, inside is the following:
@@ -25,4 +32,6 @@ The image is based on `ubuntu`, inside is the following:
 - dkP toolchains: devkitA64, devkitARM, devkitPPC
 - platform libs: libnx, libctru, libogc, wut
 
-If you don't need all of the above in one image, you're better off trying out one of [dkP's own containers](https://hub.docker.com/u/devkitpro/). If it doesn't have all the tools in it that you need, it could be used as a base for your own image that you can use in your own CI. Sealeo does not use this approach in favor of using arch's native pacman, and being able to control more about what makes it into the image in the future.
+If you don't need all of the above in one image, you're better off trying out one of [dkP's own containers](https://hub.docker.com/u/devkitpro/) and using that as a base. Sealeo does not use this approach in favor of working across multiple architectures, having all toolchains in one image, and being able to control more about what makes it into the image in the future.
+
+The homebrew targets are only possible thanks to dkP's toolchains, you can [support them on Patreon](https://www.patreon.com/devkitPro) for their efforts.
