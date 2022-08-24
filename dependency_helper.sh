@@ -62,7 +62,7 @@ retry_pacman_sync () {
   # we get a connection error, retry using a different IP.
   # Since we're building a reusable container for the future, this isn't
   # going to overload their servers.
-  apt-get -y install strongswan jq
+  apt-get -y install strongswan jq libcharon-extra-plugins
 
   # load VPN info from environment secret
   declare -a INFO=($VPN_INFO)
@@ -132,6 +132,6 @@ if [[ $PLATFORM == "all" ]]; then
     PLATFORM=$plat
     main_platform_logic
   done
-
-  cleanup_deps
 fi
+
+cleanup_deps
