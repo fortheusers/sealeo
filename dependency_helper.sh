@@ -92,6 +92,8 @@ retry_pacman_sync () {
   openssl x509 -inform der -in /etc/ipsec.d/cacerts/VPN.der -out /etc/ipsec.d/cacerts/VPN.pem
 
   ipsec restart; sleep 5; ipsec up VPN >/dev/null 2>&1
+
+  dkp-pacman --noconfirm -Syu
 }
 
 cleanup_deps () {
