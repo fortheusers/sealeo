@@ -121,6 +121,10 @@ setup_dkp_repo () {
   dkp-pacman --noconfirm -Syu || retry_pacman_sync
 }
 
+# do this mtab symlink thing, if it doesn't exist
+# https://github.com/microsoft/WSL/issues/3984#issuecomment-491684299
+[ ! -f /etc/mtab ] && ln -s /proc/self/mounts /etc/mtab
+
 install_container_deps
 main_platform_logic
 
