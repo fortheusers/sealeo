@@ -41,14 +41,14 @@ main_platform_logic () {
 }
 
 install_container_deps () {
-  apt-get update && apt-get -y install wget sudo libxml2 xz-utils lzma build-essential haveged curl
+  apt-get update && apt-get -y install ca-certificates wget sudo libxml2 xz-utils lzma build-essential haveged curl libbz2-dev
   haveged &
   touch /trustdb.gpg
 }
 
 setup_deb_sdl_deps () {
   # Sets up both sdl1 and sdl2 requirements for ubuntu
-  sudo apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-gfx-dev zlib1g-dev gcc g++ libcurl4-openssl-dev wget git libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libbz2-dev
+  sudo apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-gfx-dev zlib1g-dev gcc g++ libcurl4-openssl-dev wget git libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev libsdl-gfx1.2-dev
 
   # FYI for archlinux systems:
   # sudo pacman --noconfirm -S sdl2 sdl2_image sdl2_gfx sdl2_ttf sdl sdl_image sdl_gfx sdl_ttf
