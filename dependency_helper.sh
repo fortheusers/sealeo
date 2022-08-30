@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This is an ubuntu:kinetic dependency helper script for to help set up
+# This is an debian dependency helper script for to help set up
 # requirements for running make. Primarly this script is used by the CI,
 # but is also useful when setting up a new env
 
@@ -23,35 +23,35 @@ main_platform_logic () {
       ;;
     switch) # uses libnx
         setup_dkp_repo
-        sudo ${DKP}pacman --noconfirm -S devkitA64 libnx switch-tools switch-curl switch-bzip2 switch-freetype switch-libjpeg-turbo switch-libwebp switch-sdl2 switch-sdl2_gfx switch-sdl2_image switch-sdl2_ttf switch-zlib switch-libpng switch-mesa
+        ${DKP}pacman --noconfirm -S devkitA64 libnx switch-tools switch-curl switch-bzip2 switch-freetype switch-libjpeg-turbo switch-libwebp switch-sdl2 switch-sdl2_gfx switch-sdl2_image switch-sdl2_ttf switch-zlib switch-libpng switch-mesa
       ;;
     3ds)    # uses libctru
         setup_dkp_repo
-        sudo ${DKP}pacman --noconfirm -S devkitARM 3ds-sdl 3ds-sdl_image 3ds-sdl_mixer 3ds-sdl_gfx 3ds-sdl_ttf libctru citro3d 3dstools 3ds-curl 3ds-mbedtls
+        ${DKP}pacman --noconfirm -S devkitARM 3ds-sdl 3ds-sdl_image 3ds-sdl_mixer 3ds-sdl_gfx 3ds-sdl_ttf libctru citro3d 3dstools 3ds-curl 3ds-mbedtls
       ;;
     wii)    # uses libogc
         setup_dkp_repo
-        sudo ${DKP}pacman --noconfirm -S devkitPPC libogc gamecube-tools wii-sdl wii-sdl_gfx wii-sdl_image wii-sdl_mixer wii-sdl_ttf ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config ppc-libvorbisidec ppc-libjpeg-turbo libfat-ogc
+        ${DKP}pacman --noconfirm -S devkitPPC libogc gamecube-tools wii-sdl wii-sdl_gfx wii-sdl_image wii-sdl_mixer wii-sdl_ttf ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config ppc-libvorbisidec ppc-libjpeg-turbo libfat-ogc
       ;;
     wiiu)   # uses wut
         setup_dkp_repo
-        sudo ${DKP}pacman --noconfirm -S wut wiiu-sdl2 devkitPPC wiiu-sdl2_gfx wiiu-sdl2_image wiiu-sdl2_ttf wiiu-sdl2_mixer ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config wiiu-pkg-config wut-tools wut
+        ${DKP}pacman --noconfirm -S wut wiiu-sdl2 devkitPPC wiiu-sdl2_gfx wiiu-sdl2_image wiiu-sdl2_ttf wiiu-sdl2_mixer ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config wiiu-pkg-config wut-tools wut
       ;;
   esac
 }
 
 install_container_deps () {
-  apt-get update && apt-get -y install wget sudo libxml2 xz-utils lzma build-essential haveged curl
+  apt-get update && apt-get -y install wget libxml2 xz-utils lzma build-essential haveged curl libbz2-dev
   haveged &
   touch /trustdb.gpg
 }
 
 setup_deb_sdl_deps () {
   # Sets up both sdl1 and sdl2 requirements for ubuntu
-  sudo apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-gfx-dev zlib1g-dev gcc g++ libcurl4-openssl-dev wget git libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libbz2-dev
+  apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-gfx-dev zlib1g-dev gcc g++ libcurl4-openssl-dev wget git libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev libsdl-gfx1.2-dev
 
   # FYI for archlinux systems:
-  # sudo pacman --noconfirm -S sdl2 sdl2_image sdl2_gfx sdl2_ttf sdl sdl_image sdl_gfx sdl_ttf
+  # pacman --noconfirm -S sdl2 sdl2_image sdl2_gfx sdl2_ttf sdl sdl_image sdl_gfx sdl_ttf
 }
 
 export DKP=""
@@ -120,6 +120,10 @@ setup_dkp_repo () {
 
   dkp-pacman --noconfirm -Syu || retry_pacman_sync
 }
+
+# do this mtab symlink thing, if it doesn't exist
+# https://github.com/microsoft/WSL/issues/3984#issuecomment-491684299
+[ ! -f /etc/mtab ] && ln -s /proc/self/mounts /etc/mtab
 
 install_container_deps
 main_platform_logic

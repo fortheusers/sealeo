@@ -25,7 +25,7 @@ docker run -v $(pwd):/code -it ghcr.io/fortheusers/sealeo /bin/bash
 This can be useful for non-Chesto projects or to debug code interactively.
 
 ## what's inside
-The image is based on `ubuntu`, inside is the following:
+The image is based on `debian`, inside is the following:
 - sdl1 deps/portlibs for PC, 3ds, wii
 - sdl2 deps/portlibs for PC, wiiu, switch
 - dkp-pacman configured with dkP's repos

@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'ci-woes'
+      - 'ci-woes-2'
     tags:
       - 'v*.*.*'
       - 'latest'
