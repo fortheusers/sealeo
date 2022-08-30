@@ -1,4 +1,4 @@
-FROM ubuntu:kinetic-20220801
+FROM debian:stable-slim
 
 WORKDIR /code
 COPY dependency_helper.sh /code
