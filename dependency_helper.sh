@@ -35,7 +35,7 @@ main_platform_logic () {
       ;;
     wiiu)   # uses wut
         setup_dkp_repo
-        ${DKP}pacman --noconfirm -S wut wiiu-sdl2 devkitPPC wiiu-sdl2_gfx wiiu-sdl2_image wiiu-sdl2_ttf wiiu-sdl2_mixer ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config wiiu-pkg-config wut-tools wut
+        ${DKP}pacman --noconfirm -S wut wiiu-sdl2 devkitPPC wiiu-sdl2_gfx wiiu-sdl2_image wiiu-sdl2_ttf wiiu-sdl2_mixer ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config wiiu-pkg-config wut-tools wut wiiu-curl
       ;;
   esac
 }
@@ -139,3 +139,13 @@ if [[ $PLATFORM == "all" ]]; then
 fi
 
 cleanup_deps
+
+# if VPN_INFO is present, we should check if wut
+# got setup properly, otherwise we know the container
+# won't work for the purposes of the CI
+if [[ -n "${VPN_INFO}" ]]; then
+  if [[ ! -f /opt/devkitpro/wut/share/wut_rules ]]; then
+    echo "[error] at least wut was not properly installed"
+    exit 1
+  fi
+fi
