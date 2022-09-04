@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'ci-woes-3'
     tags:
       - 'v*.*.*'
       - 'latest'
@@ -59,7 +60,7 @@ jobs:
           context: .
           allow: network.host
           build-args: |
-            VPN_INFO=${{ env.VPN_INFO }}
+            VPN_INFO=${{ secrets.VPN_INFO }}
           platforms: linux/amd64,linux/arm64/v8
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.spheal_meta.outputs.tags }},ghcr.io/fortheusers/sealeo:latest
