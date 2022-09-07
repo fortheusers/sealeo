@@ -23,7 +23,7 @@ main_platform_logic () {
       ;;
     switch) # uses libnx
         setup_dkp_repo
-        ${DKP}pacman --noconfirm -S devkitA64 libnx switch-tools switch-curl switch-bzip2 switch-freetype switch-libjpeg-turbo switch-libwebp switch-sdl2 switch-sdl2_gfx switch-sdl2_image switch-sdl2_ttf switch-zlib switch-libpng switch-mesa
+        ${DKP}pacman --noconfirm -S devkitA64 libnx switch-tools switch-curl switch-bzip2 switch-freetype switch-libjpeg-turbo switch-libwebp switch-sdl2 switch-sdl2_gfx switch-sdl2_image switch-sdl2_ttf switch-zlib switch-libpng switch-mesa switch-sdl2_mixer
       ;;
     3ds)    # uses libctru
         setup_dkp_repo
@@ -48,7 +48,7 @@ install_container_deps () {
 
 setup_deb_sdl_deps () {
   # Sets up both sdl1 and sdl2 requirements for ubuntu
-  apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-gfx-dev zlib1g-dev gcc g++ libcurl4-openssl-dev wget git libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libfreetype-dev
+  apt-get -y install libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev libsdl2-image-dev libsdl2-gfx-dev zlib1g-dev gcc g++ libcurl4-openssl-dev wget git libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libfreetype-dev libsdl-mixer1.2-dev
 
   # FYI for archlinux systems:
   # pacman --noconfirm -S sdl2 sdl2_image sdl2_gfx sdl2_ttf sdl sdl_image sdl_gfx sdl_ttf
