@@ -38,7 +38,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker meta
-        id: spheal_meta # you'll use this in the next step
+        id: sealeo_meta # you'll use this in the next step
         uses: docker/metadata-action@v3
         with:
           # list of Docker images to use as base name for tags
@@ -62,5 +62,5 @@ jobs:
             VPN_INFO=${{ secrets.VPN_INFO }}
           platforms: linux/amd64,linux/arm64/v8
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.spheal_meta.outputs.tags }},ghcr.io/fortheusers/sealeo:latest
-          labels: ${{ steps.spheal_meta.outputs.labels }}
+          tags: ${{ steps.sealeo_meta.outputs.tags }},ghcr.io/fortheusers/sealeo:latest
+          labels: ${{ steps.sealeo_meta.outputs.labels }}
