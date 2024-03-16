@@ -8,7 +8,7 @@
 # variable ( one of pc, pc-sdl1, switch, 3ds, wii, wiiu, all )
 #  eg. PLATFORM=switch ./dependency_helper.sh
 
-# It's may be easier to follow the README.md instructions for the
+# It may be easier to follow the README.md instructions for the
 # desired target and platform that you want to build, but this script may
 # help if you are interested in seeing how the dependencies come together
 # on various platforms, or how the CI works
@@ -32,12 +32,41 @@ main_platform_logic () {
     wii)    # uses libogc
         setup_dkp_repo
         ${DKP}pacman --noconfirm -S devkitPPC libogc gamecube-tools wii-sdl2 wii-sdl2_gfx wii-sdl2_image wii-sdl2_ttf wii-sdl2_mixer ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config ppc-libvorbisidec ppc-libjpeg-turbo libfat-ogc
+        install_wii_curl
       ;;
     wiiu)   # uses wut
         setup_dkp_repo
         ${DKP}pacman --noconfirm -S wut wiiu-sdl2 devkitPPC wiiu-sdl2_gfx wiiu-sdl2_image wiiu-sdl2_ttf wiiu-sdl2_mixer ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config wiiu-pkg-config wut-tools wut wiiu-curl
       ;;
   esac
+}
+
+install_wii_curl () {
+  # curl on the wii uses three packages: libwiisocket, wii-curl, and wii-mbedtls
+  # These are not (yet?) available upstream, so we need to build them ourselves
+  # For more info, see: https://gitlab.com/4TU/wii-packages
+
+  apt-get install -y cmake makepkg file git sudo
+  ${DKP}pacman --noconfirm -S dkp-cmake-common-utils dkp-toolchain-vars wii-pkg-config wii-cmake
+
+  git clone https://gitlab.com/4TU/wii-packages.git
+
+  export PACMAN=${DKP}pacman
+  export DEVKITPRO=/opt/devkitpro
+  export DEVKITPPC=/opt/devkitpro/devkitPPC
+
+  cd wii-packages/libwiisocket
+  sudo -E -u nobody makepkg -s --noconfirm
+  ${PACMAN} --noconfirm -U libwiisocket-*.pkg.tar.gz
+  cd ../wii-mbedtls
+  sudo -E -u nobody makepkg -s --noconfirm
+  ${PACMAN} --noconfirm -U wii-mbedtls-*.pkg.tar.gz
+  cd ../wii-curl
+  sudo -E -u nobody makepkg -s --noconfirm
+  ${PACMAN} --noconfirm -U wii-curl-*.pkg.tar.gz
+  cd ../..
+
+  rm -rf wii-packages
 }
 
 install_container_deps () {
@@ -57,49 +86,7 @@ setup_deb_sdl_deps () {
 export DKP=""
 export PACMAN_CONFIGURED=""
 
-retry_pacman_sync () {
-  # Some continuous integration IPs are blocked by the dkP pacman repo, so if
-  # we get a connection error, retry using a different IP.
-  # Since we're building a reusable container for the future, this isn't
-  # going to overload their servers.
-  apt-get -y install strongswan jq libcharon-extra-plugins
-
-  # load VPN info from environment secret
-  declare -a INFO=($VPN_INFO)
-  VPN_DATA=${INFO[0]}; VPN_CERT=${INFO[1]}; VPN_USER=${INFO[2]}; VPN_AUTH=${INFO[3]}
-  VPN_SERVER=$(curl -s $VPN_DATA | jq -r -c "map(select(.features.ikev2) | .domain) | .[]" | sort -R | head -1)
-
-  echo "$VPN_USER : EAP \"$VPN_AUTH\"" > /etc/ipsec.secrets 
-  echo "conn VPN
-          keyexchange=ikev2
-          dpdaction=clear
-          dpddelay=300s
-          eap_identity=\"$VPN_USER\"
-          leftauth=eap-mschapv2
-          left=%defaultroute
-          leftsourceip=%config
-          right=${VPN_SERVER}
-          rightauth=pubkey
-          rightsubnet=0.0.0.0/0
-          rightid=%${VPN_SERVER}
-          rightca=/etc/ipsec.d/cacerts/VPN.pem
-          type=tunnel
-          auto=add
-  " > /etc/ipsec.conf 
-
-  mkdir -p /etc/ipsec.d/cacerts/
-  wget $VPN_CERT -O /etc/ipsec.d/cacerts/VPN.der >/dev/null 2>&1
-  openssl x509 -inform der -in /etc/ipsec.d/cacerts/VPN.der -out /etc/ipsec.d/cacerts/VPN.pem
-
-  ipsec restart; sleep 5; ipsec up VPN >/dev/null 2>&1
-
-  dkp-pacman --noconfirm -Syu
-}
-
 cleanup_deps () {
-  rm -rf /etc/ipsec.d
-  rm -f /etc/ipsec.secrets*
-  rm -f /etc/ipsec.conf*
   rm -rf /var/cache/pacman
 }
 
@@ -118,7 +105,7 @@ setup_dkp_repo () {
 
   DKP="dkp-"
 
-  dkp-pacman --noconfirm -Syu || retry_pacman_sync
+  dkp-pacman --noconfirm -Syu
 }
 
 # do this mtab symlink thing, if it doesn't exist
@@ -139,13 +126,3 @@ if [[ $PLATFORM == "all" ]]; then
 fi
 
 cleanup_deps
-
-# if VPN_INFO is present, we should check if wut
-# got setup properly, otherwise we know the container
-# won't work for the purposes of the CI
-if [[ -n "${VPN_INFO}" ]]; then
-  if [[ ! -f /opt/devkitpro/wut/share/wut_rules ]]; then
-    echo "[error] at least wut was not properly installed"
-    exit 1
-  fi
-fi
