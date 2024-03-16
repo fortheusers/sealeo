@@ -31,7 +31,7 @@ main_platform_logic () {
       ;;
     wii)    # uses libogc
         setup_dkp_repo
-        ${DKP}pacman --noconfirm -S devkitPPC libogc gamecube-tools wii-sdl wii-sdl_gfx wii-sdl_image wii-sdl_mixer wii-sdl_ttf ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config ppc-libvorbisidec ppc-libjpeg-turbo libfat-ogc
+        ${DKP}pacman --noconfirm -S devkitPPC libogc gamecube-tools wii-sdl2 wii-sdl2_gfx wii-sdl2_image wii-sdl2_ttf wii-sdl2_mixer ppc-zlib ppc-bzip2 ppc-freetype ppc-mpg123 ppc-libpng ppc-pkg-config ppc-libvorbisidec ppc-libjpeg-turbo libfat-ogc
       ;;
     wiiu)   # uses wut
         setup_dkp_repo
@@ -108,7 +108,7 @@ setup_dkp_repo () {
   if [ ! -z $PACMAN_CONFIGURED ]; then return; fi
   PACMAN_CONFIGURED="true"
 
-  # NOTICE: These direct URLs for dkp's pacman will become outdated, check https://github.com/devkitPro/pacman/releases/ for the latest install instructions
+  # NOTICE: Check https://github.com/devkitPro/pacman/releases/ for the latest install instructions
 
   mkdir -p /usr/local/share/keyring/
   curl https://apt.devkitpro.org/devkitpro-pub.gpg > /usr/local/share/keyring/devkitpro-pub.gpg
