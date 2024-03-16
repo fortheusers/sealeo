@@ -55,6 +55,8 @@ install_wii_curl () {
   export DEVKITPRO=/opt/devkitpro
   export DEVKITPPC=/opt/devkitpro/devkitPPC
 
+  chown -R nobody:nogroup wii-packages
+
   cd wii-packages/libwiisocket
   sudo -E -u nobody makepkg -s --noconfirm
   ${PACMAN} --noconfirm -U libwiisocket-*.pkg.tar.gz
@@ -122,6 +124,17 @@ if [[ $PLATFORM == "all" ]]; then
   do
     PLATFORM=$plat
     main_platform_logic
+  done
+
+  # make sure our container was successful, by checking for the presence of a few essential packages
+  # (only if we ran the "all" target)
+  PKGNAMES=( wii-curl wii-sdl2 wiiu-curl wiiu-sdl2 switch-curl switch-sdl2 )
+  for pkg in "${PKGNAMES[@]}"
+  do
+    if ! { ${DKP}pacman -Q $pkg > /dev/null; }; then
+      echo "Error: $pkg was not installed"
+      exit 1
+    fi
   done
 fi
 
