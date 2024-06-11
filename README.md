@@ -1,5 +1,5 @@
 # sealeo
-A docker image to facilitate building homebrew apps across multi-platforms. Based on [Spheal](https://gitlab.com/4tu/spheal), but has support for both amd64 and arm64 architectures.
+A docker image to facilitate building homebrew apps across multi-platforms. Based on [Spheal](https://gitlab.com/4tu/spheal), but has support for both arm64 and amd64 architectures.
 
 <img src="https://user-images.githubusercontent.com/2467473/186280808-80ce15d7-f6d7-454a-82cb-21226a598a31.png" alt="baby" width="200" />
 
@@ -11,7 +11,7 @@ Building is deterministic since the deps are locked into the image, and also pot
 Can be executed from the root of your [chesto](https://github.com/fortheusers/chesto) git project. Export the PLATFORM env variable to point to the target that you want to build for.
 
 ```
-export PLATFORM=switch    # or wiiu, 3ds, wii, pc, pc-sdl1
+export PLATFORM=switch    # or wiiu, 3ds, wii, pc
 docker run -v $(pwd):/code -it ghcr.io/fortheusers/sealeo "make $PLATFORM"
 ```
 
@@ -26,12 +26,10 @@ This can be useful for non-Chesto projects or to debug code interactively.
 
 ## what's inside
 The image is based on `debian`, inside is the following:
-- sdl1 deps/portlibs for PC, 3ds, wii
-- sdl2 deps/portlibs for PC, wiiu, switch
-- dkp-pacman configured with dkP's repos
+- sdl2 and curl for PC, wiiu, switch, wii, 3ds
 - dkP toolchains: devkitA64, devkitARM, devkitPPC
-- platform libs: libnx, libctru, libogc, wut
+- platform libs: wut, libnx, libogc, libctru
 
-If you don't need all of the above in one image, you're better off trying out one of [dkP's own containers](https://hub.docker.com/u/devkitpro/) and using that as a base. Sealeo does not use this approach in favor of working across multiple architectures, having all toolchains in one image, and being able to control more about what makes it into the image in the future.
+If you don't need all of the above in one image, you're better off trying out one of [dkP's own containers](https://hub.docker.com/u/devkitpro/) and using that as a base. Sealeo does not use this approach in favor of working across multiple architectures, having all toolchains in one image, and being able to control which versions make it into the image.
 
 The homebrew targets are only possible thanks to dkP's toolchains, you can [support them on Patreon](https://www.patreon.com/devkitPro) for their efforts.
