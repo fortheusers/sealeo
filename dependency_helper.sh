@@ -75,6 +75,7 @@ install_wii_curl () {
 install_3ds_sdl2 () {
   # https://wiki.libsdl.org/SDL2/README/n3ds
 
+  apt-get install -y cmake makepkg file git sudo
   libs=("SDL" "SDL_ttf" "SDL_image")
   export DEVKITPRO=/opt/devkitpro
   export DEVKITARM=/opt/devkitpro/devkitARM
