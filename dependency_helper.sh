@@ -27,7 +27,7 @@ main_platform_logic () {
       ;;
     3ds)    # uses libctru
         setup_dkp_repo
-        ${DKP}pacman --noconfirm -S devkitARM libctru citro3d 3dstools 3ds-curl 3ds-mbedtls 3ds-cmake 3ds-mpg123 3ds-opusfile 3ds-libogg 3ds-libopus
+        ${DKP}pacman --noconfirm -S devkitARM libctru citro3d 3dstools 3ds-curl 3ds-mbedtls 3ds-cmake 3ds-mpg123 3ds-opusfile 3ds-libogg 3ds-libopus 3ds-freetype 3ds-libjpeg-turbo
         install_3ds_sdl2
       ;;
     wii)    # uses libogc
