@@ -1,11 +1,3 @@
-FROM debian:stable-slim
-
-WORKDIR /code
-COPY dependency_helper.sh /code
-
-ARG VPN_INFO
-ENV PLATFORM all
-
-RUN ./dependency_helper.sh
-
-CMD make
+FROM ghcr.io/fortheusers/sealeo:latest
+# base ourselves off the "full" sealeo image, and then update it (evolve it?)
+RUN dkp-pacman -Syu --noconfirm
