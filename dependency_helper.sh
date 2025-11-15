@@ -136,7 +136,7 @@ install_container_deps
 main_platform_logic
 
 # handle the "all" target by looping through all platforms
-all_plats=( pc wiiu switch 3ds wii )
+all_plats=( pc wiiu switch )
 if [[ $PLATFORM == "all" ]]; then
   for plat in "${all_plats[@]}"
   do
@@ -146,7 +146,7 @@ if [[ $PLATFORM == "all" ]]; then
 
   # make sure our container was successful, by checking for the presence of a few essential packages
   # (only if we ran the "all" target)
-  PKGNAMES=( wii-curl wii-sdl2 wiiu-curl wiiu-sdl2 switch-curl switch-sdl2 )
+  PKGNAMES=( wiiu-curl wiiu-sdl2 switch-curl switch-sdl2 )
   for pkg in "${PKGNAMES[@]}"
   do
     if ! { ${DKP}pacman -Q $pkg > /dev/null; }; then

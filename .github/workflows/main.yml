@@ -5,12 +5,14 @@ on:
   push:
     branches:
       - 'main'
+      - 'no-3ds-no-wii'
     tags:
       - 'v*.*.*'
-      - 'latest'
+      - 'no-3ds-no-wii'
   pull_request:
     branches:
       - 'main'
+      - 'no-3ds-no-wii'
 
 # permissions are needed if pushing to ghcr.io
 permissions: 
@@ -62,5 +64,5 @@ jobs:
             VPN_INFO=${{ secrets.VPN_INFO }}
           platforms: linux/amd64,linux/arm64/v8
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.sealeo_meta.outputs.tags }},ghcr.io/fortheusers/sealeo:latest
+          tags: ${{ steps.sealeo_meta.outputs.tags }},ghcr.io/fortheusers/sealeo:no-3ds-no-wii
           labels: ${{ steps.sealeo_meta.outputs.labels }}
